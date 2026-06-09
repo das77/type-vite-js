@@ -150,7 +150,7 @@ describe('processResult', () => {
         { type: 'megamillions', logo: '/megamillions.svg', numbers: [1, 2, 3, 4, 5, 6], megaBall: 6 },
         { type: 'euromillions', logo: '/euromillions.svg', numbers: [1, 2, 3, 4, 5] },
         { type: 'lottomax', logo: '/lottomax.svg', numbers: [1, 2, 3, 4, 5] },
-      ] as const;
+      ];
 
       for (const { type, logo, numbers, ...rest } of games) {
         const result = processResult({ lotteryType: type, drawDate: '2026-01-06', numbers, ...rest });
