@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 
 // In GitHub Actions, GITHUB_REPOSITORY is "owner/repo-name".
@@ -9,5 +10,20 @@ export default defineConfig({
   base,
   build: {
     target: 'es2023',
+  },
+  test: {
+    environment: 'jsdom',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/main.ts', 'src/types.ts', 'src/**/*.test.ts'],
+      thresholds: {
+        lines: 95,
+        functions: 95,
+        branches: 95,
+        statements: 95,
+      },
+    },
   },
 })
