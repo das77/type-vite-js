@@ -46,6 +46,37 @@ src/
 └── style.css       # Full styling including CSS-only loading spinner
 ```
 
+## Unit Testing
+
+Tests are written with [Vitest](https://vitest.dev/) — the natural choice for a Vite project because it shares the same config file, handles `import.meta.env` without shims, and has a Jest-compatible API.
+
+```bash
+npm test              # run all tests once
+npm run test:watch    # re-run on file save
+npm run coverage      # run tests and generate coverage report
+npm run typecheck     # type-check without building
+```
+
+**72 tests across 4 files, 100% coverage:**
+
+| File | Tests | Scope |
+| --- | --- | --- |
+| `src/ratelimiter.test.ts` | 9 | Allow/block logic, timestamp pruning, `secondsUntilNext` math, ceiling rounding, default parameters |
+| `src/api.test.ts` | 9 | Happy path, all four error branches (body message, missing message, JSON parse failure, 401), custom base URL |
+| `src/lottery.test.ts` | 27 | Number splitting with/without megaBall, date formatting, UTC no-shift invariant, all four logo mappings, every draw-day transition for all four games, `summarizeResult` variants |
+| `src/ui.test.ts` | 27 | Shell rendering, select population, all five `FetchState` transitions, countdown start/decrement/expire/cancel, all `renderResult` variants, `onFetch` wiring |
+
+`src/types.ts` and `src/main.ts` are excluded from coverage — pure type definitions have no executable paths, and the entry point is covered by integration.
+
+**Viewing the HTML coverage report:**
+
+After running `npm run coverage`, the report is written to `public/coverage/`:
+
+- **Dev server:** `http://localhost:5173/coverage/`
+- **Deployed site:** `https://das77.github.io/type-vite-js/coverage/` (if coverage was generated before the build)
+
+`public/coverage/` is gitignored so the generated files are never committed.
+
 ## Deployment
 
 The GitHub Actions workflow in [.github/workflows/deploy.yml](.github/workflows/deploy.yml) builds and deploys to GitHub Pages on every push to `main`.
