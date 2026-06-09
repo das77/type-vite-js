@@ -2,6 +2,10 @@
 
 An interactive Vite + TypeScript app that fetches the latest lottery results for four games — Powerball, Mega Millions, EuroMillions, and Lotto Max — using the [APIVerve Lottery API](https://apiverve.com). Built as a learning project for a Full Stack Engineering program.
 
+## Live Demo
+
+**Live site:** [https://das77.github.io/type-vite-js/](https://das77.github.io/type-vite-js/)
+
 ## Features
 
 - Live lottery results for four games via `https://api.apiverve.com/v1/lottery`
