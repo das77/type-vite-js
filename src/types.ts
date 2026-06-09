@@ -23,6 +23,7 @@ export interface DisplayResult {
   bonus: number | null;
   jackpot: string | null;
   formattedDate: string;
+  nextDrawing: string;
   logoUrl: string;
 }
 

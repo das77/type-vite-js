@@ -314,6 +314,14 @@ button#fetch-btn:disabled {
   background: radial-gradient(circle at 35% 35%, #ef5350, var(--ball-bonus-bg));
 }
 
+/* ── Next drawing ── */
+
+.next-drawing {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
 /* ── Multiplier badge ── */
 
 .multiplier-badge {

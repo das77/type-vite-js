@@ -22,6 +22,25 @@ export const GAME_LOGOS: Record<GameName, string> = {
 export const getGameOptions = (): Array<[GameName, string]> =>
   Object.entries(GAME_LABELS) as Array<[GameName, string]>;
 
+// 0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
+const DRAW_DAYS: Record<GameName, number[]> = {
+  powerball:    [1, 3, 6],
+  megamillions: [2, 5],
+  euromillions: [2, 5],
+  lottomax:     [2, 5],
+};
+
+const getNextDrawing = (drawDate: string, game: GameName): string => {
+  const [year, month, day] = drawDate.split('-').map(Number);
+  const next = new Date(year, month - 1, day + 1);
+  const days = DRAW_DAYS[game];
+  for (let i = 0; i < 7; i++) {
+    if (days.includes(next.getDay())) break;
+    next.setDate(next.getDate() + 1);
+  }
+  return next.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+};
+
 export const processResult = (
   { lotteryType, drawDate, numbers, megaBall, jackpot }: LotteryResult,
 ): DisplayResult => {
@@ -36,6 +55,7 @@ export const processResult = (
     bonus: megaBall ?? null,
     jackpot: jackpot ?? null,
     formattedDate: formatDate(drawDate),
+    nextDrawing: getNextDrawing(drawDate, gameName),
     logoUrl: GAME_LOGOS[gameName],
   };
 };
