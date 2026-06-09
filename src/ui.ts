@@ -45,7 +45,7 @@ export class LotteryUI {
   }
 
   renderResult(result: DisplayResult): void {
-    const { formattedDate, numbers, bonus, multiplier, logoUrl } = result;
+    const { formattedDate, numbers, bonus, jackpot, logoUrl } = result;
     const label = GAME_LABELS[result.game];
     this.resultsEl.innerHTML = `
       <div class="result-card" aria-label="${summarizeResult(result)}">
@@ -54,7 +54,7 @@ export class LotteryUI {
           <span class="result-date">${formattedDate}</span>
         </div>
         ${this.buildNumberBalls(numbers, bonus)}
-        ${multiplier != null ? `<span class="multiplier-badge">×${multiplier}</span>` : ''}
+        ${jackpot != null ? `<span class="multiplier-badge">Estimated Jackpot: ${jackpot}</span>` : ''}
       </div>`;
   }
 
