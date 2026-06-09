@@ -23,27 +23,36 @@ export const getGameOptions = (): Array<[GameName, string]> =>
   Object.entries(GAME_LABELS) as Array<[GameName, string]>;
 
 export const processResult = (
-  { game, date, numbers, bonus, multiplier }: LotteryResult,
+  { lotteryType, drawDate, numbers, megaBall, jackpot }: LotteryResult,
 ): DisplayResult => {
-  const [first, ...rest] = numbers;
-  const gameName = game as GameName;
+  // When the API includes the bonus ball at the end of numbers[], separate it out
+  const mainNumbers = megaBall != null ? numbers.slice(0, -1) : numbers;
+  const [first, ...rest] = mainNumbers;
+  const gameName = lotteryType as GameName;
   return {
     game: gameName,
-    date,
+    date: drawDate,
     numbers: [first, ...rest],
-    bonus: bonus ?? null,
-    multiplier: multiplier ?? null,
-    formattedDate: formatDate(date),
+    bonus: megaBall ?? null,
+    jackpot: jackpot ?? null,
+    formattedDate: formatDate(drawDate),
     logoUrl: GAME_LOGOS[gameName],
   };
 };
 
 export const summarizeResult = (r: DisplayResult): string => {
-  const { game, formattedDate, numbers, bonus, multiplier } = r;
+  const { game, formattedDate, numbers, bonus, jackpot } = r;
   const bonusPart = bonus != null ? ` | Bonus: ${bonus}` : '';
-  const multPart = multiplier != null ? ` | ×${multiplier}` : '';
-  return `${GAME_LABELS[game]} — ${formattedDate} — ${numbers.join(', ')}${bonusPart}${multPart}`;
+  const jackpotPart = jackpot != null ? ` | Jackpot: ${jackpot}` : '';
+  return `${GAME_LABELS[game]} — ${formattedDate} — ${numbers.join(', ')}${bonusPart}${jackpotPart}`;
 };
 
-const formatDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const formatDate = (iso: string): string => {
+  // Split to avoid UTC-to-local offset shifting the date by a day
+  const [year, month, day] = iso.split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
