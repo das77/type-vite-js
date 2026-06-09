@@ -40,9 +40,29 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/deploy-pages@v4
         id: deployment
+
+  update-readme:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update live site URL in README
+        run: |
+          PAGE_URL="${{ needs.deploy.outputs.page_url }}"
+          sed -i "s|^\*\*Live site:\*\*.*|**Live site:** [${PAGE_URL}](${PAGE_URL})|" README.md
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --staged --quiet || git commit -m "docs: update live site URL after deployment [skip ci]"
+          git push
