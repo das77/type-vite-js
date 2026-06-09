@@ -3,11 +3,11 @@ export type GameName = 'powerball' | 'megamillions' | 'euromillions' | 'lottomax
 export type FetchState = 'idle' | 'loading' | 'success' | 'error' | 'rate-limited';
 
 export interface LotteryResult {
-  game: string;
-  date: string;
+  lotteryType: string;
+  drawDate: string;
   numbers: number[];
-  bonus: number | null;
-  multiplier: string | null;
+  megaBall?: number | null;
+  jackpot?: string | null;
 }
 
 export interface ApiResponse<T> {
@@ -21,7 +21,7 @@ export interface DisplayResult {
   date: string;
   numbers: number[];
   bonus: number | null;
-  multiplier: string | null;
+  jackpot: string | null;
   formattedDate: string;
   logoUrl: string;
 }
